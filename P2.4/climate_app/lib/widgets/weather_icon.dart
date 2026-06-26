@@ -16,21 +16,27 @@ class WeatherIcon extends StatelessWidget {
     Color color;
 
     switch (condition.toLowerCase()) {
-      case 'sunny':
+      case 'clear':
         icon = Icons.sunny;
         color = Colors.orange;
-      case 'cloudy':
+      case 'clouds':
         icon = Icons.cloud;
         color = Colors.grey;
-      case 'rainy':
+      case 'rain':
+      case 'drizzle':
         icon = Icons.water_drop;
         color = Colors.blue;
-      case 'stormy':
+      case 'thunderstorm':
         icon = Icons.thunderstorm;
         color = Colors.indigo;
-      case 'windy':
-        icon = Icons.air;
-        color = Colors.teal;
+      case 'snow':
+        icon = Icons.ac_unit;
+        color = Colors.lightBlue;
+      case 'mist':
+      case 'fog':
+      case 'haze':
+        icon = Icons.foggy;
+        color = Colors.grey;
       default:
         icon = Icons.cloud;
         color = Colors.grey;

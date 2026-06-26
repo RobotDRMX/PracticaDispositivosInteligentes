@@ -4,8 +4,11 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import '../models/weather_model.dart';
 import '../utils/weather_utils.dart';
 import '../services/ble_service.dart';
+import '../services/weather_service.dart';
 
 class WeatherProvider extends ChangeNotifier {
+  final WeatherService _weatherService = WeatherService();
+
   // Estado clima normal
   Weather? _weather;
   bool _isLoading = false;
@@ -37,27 +40,16 @@ class WeatherProvider extends ChangeNotifier {
 
   // ── Clima normal ──────────────────────────────────────────────────────────
 
-  Future<void> loadWeather(String city) async {
+  Future<void> fetchWeather(String city) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
     try {
-      await Future.delayed(const Duration(seconds: 1));
-
-      if (!WeatherUtils.isValidTemperature(24)) {
-        throw Exception('Invalid temperature from data source');
-      }
-
-      _weather = Weather(
-        city: city,
-        temperature: 24,
-        condition: 'cloudy',
-        humidity: 65,
-      );
+      _weather = await _weatherService.getWeather(city);
       _isBleData = false;
     } catch (e) {
-      _errorMessage = 'Error loading weather: $e';
+      _errorMessage = e.toString().replaceFirst('Exception: ', '');
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -75,7 +67,9 @@ class WeatherProvider extends ChangeNotifier {
         city: _weather!.city,
         temperature: newTemp,
         condition: _weather!.condition,
+        description: _weather!.description,
         humidity: _weather!.humidity,
+        windSpeed: _weather!.windSpeed,
       );
       notifyListeners();
     }
@@ -123,7 +117,6 @@ class WeatherProvider extends ChangeNotifier {
       _bleStatus = 'Conectado. Leyendo características GATT...';
       notifyListeners();
 
-      // Escucha desconexiones y muestra el mensaje requerido por la práctica
       await _connectionSubscription?.cancel();
       _connectionSubscription = _bleService.connectionState(device).listen((state) {
         if (state == BluetoothConnectionState.disconnected) {
@@ -152,7 +145,9 @@ class WeatherProvider extends ChangeNotifier {
         city: city,
         temperature: temp,
         condition: 'sunny',
+        description: 'Datos desde wearable BLE',
         humidity: 50,
+        windSpeed: 0,
       );
       _bleStatus = 'Conectado a ${device.platformName.isNotEmpty ? device.platformName : device.remoteId.str}';
       _errorMessage = null;

@@ -56,7 +56,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         onTap: () {
                           context
                               .read<WeatherProvider>()
-                              .loadWeather(filteredCities[index]);
+                              .fetchWeather(filteredCities[index]);
                           Navigator.pop(context, filteredCities[index]);
                         },
                       );
