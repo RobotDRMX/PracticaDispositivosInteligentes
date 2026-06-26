@@ -1,0 +1,35 @@
+class WeatherUtils {
+  static double celsiusToFahrenheit(int celsius) {
+    return (celsius * 9 / 5) + 32;
+  }
+
+  static int fahrenheitToCelsius(double fahrenheit) {
+    return ((fahrenheit - 32) * 5 / 9).toInt();
+  }
+
+  static String getWeatherIcon(String condition) {
+    switch (condition.toLowerCase()) {
+      case 'clear':
+        return '☀️';
+      case 'clouds':
+        return '☁️';
+      case 'rain':
+      case 'drizzle':
+        return '🌧️';
+      case 'snow':
+        return '❄️';
+      case 'thunderstorm':
+        return '⛈️';
+      case 'mist':
+      case 'fog':
+      case 'haze':
+        return '🌫️';
+      default:
+        return '🌤️';
+    }
+  }
+
+  static bool isValidTemperature(int temp) {
+    return temp >= -50 && temp <= 60;
+  }
+}
