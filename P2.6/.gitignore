@@ -1,0 +1,16 @@
+# Ignore environment variables (API keys)
+.env
+*.env
+**/.env
+**/*.env
+
+# IDE and tool files
+.idea/
+.vscode/
+
+# Flutter specific ignores (just in case they are outside climate_app)
+**/build/
+**/.dart_tool/
+**/.flutter-plugins-dependencies
+**/.pub-cache/
+**/.pub/
